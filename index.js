@@ -6,7 +6,7 @@ const client = new Client({
   intents: [GatewayIntentBits.Guilds],
 });
 
-client.once("ready", () => {
+client.once("clientReady", () => {
   console.log(`Logged in as ${client.user.tag}`);
 });
 
@@ -45,4 +45,11 @@ client.on("interactionCreate", async (interaction) => {
   }
 });
 
-client.login(process.env.DISCORD_TOKEN);
+const token = process.env.DISCORD_TOKEN;
+if (!token || typeof token !== "string" || !token.trim()) {
+  console.error(
+    "DISCORD_TOKEN is missing or empty. Set the DISCORD_TOKEN variable in your environment (e.g. Railway Variables).",
+  );
+  process.exit(1);
+}
+client.login(token.trim());
